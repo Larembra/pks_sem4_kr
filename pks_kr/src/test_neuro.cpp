@@ -27,7 +27,7 @@ std::vector<std::string> split_by_newline(const std::string& text) {
 
 int main() {
     // Get your GitHub PAT token from environment variable
-    const char* token = std::getenv("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");
+    const char* token = std::getenv("token");
     if (!token) {
         std::cerr << "GITHUB_TOKEN environment variable not set." << std::endl;
         return 1;

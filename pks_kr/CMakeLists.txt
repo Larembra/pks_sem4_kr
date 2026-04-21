@@ -18,15 +18,15 @@ if (CURL_FOUND)
 endif()
 
 add_executable(pks_kr
-        main.cpp
-        revolver.cpp
-        contestant.cpp
-        nn.cpp
-        player.cpp
-        telegram.cpp
-        game.cpp
-        test_connection.cpp
-        test_vk_bot.cpp
+        src/main.cpp
+        src/revolver.cpp
+        src/contestant.cpp
+        src/nn.cpp
+        src/player.cpp
+        src/telegram.cpp
+        src/game.cpp
+        src/test_connection.cpp
+        src/test_vk_bot.cpp
         #tgbottest.cpp
 )
 
