@@ -9,7 +9,7 @@
 
 using json = nlohmann::json;
 
-const std::string token = "7928899642:AAH6uR3pM54MJL9oZMAwzsjKqUrFF0VZtpA";
+const std::string token = ".....";
 int64_t chat_id;
 
 size_t writecallback(void* contents, size_t size, size_t nmemb, void* userp) {
