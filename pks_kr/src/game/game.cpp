@@ -1,16 +1,16 @@
-#include "game.h"
-#include "revolver.h"
-#include "player.h"
-#include "nn.h"
+#include "../include/game/game.h"
+#include "../include/weapons/revolver.h"
+#include "../include/contestants/player.h"
+#include "../include/contestants/nn.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <curl/curl.h>
-#include "json.hpp"
+#include "../include/json/json.hpp"
 #include <unistd.h>
 #include <thread>
 #include <chrono>
-#include "telegram.h"
+#include "../include/API/telegram.h"
 
 std::string rules =
     "<b>Magic Revolver Duel</b> - variation of russian roulette with magical rules.\n"

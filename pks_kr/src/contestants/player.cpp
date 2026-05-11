@@ -1,11 +1,12 @@
-#include "player.h"
-#include "revolver.h"
+#include "../include/contestants/player.h"
+#include "../include/weapons/revolver.h"
 #include <iostream>
-#include "telegram.h"
+#include "../include/API/telegram.h"
+#include "../include/secret/dotenv.h"
 
 using namespace std;
 
-const std::string TELEGRAM_TOKEN = "7928899642:AAGmfMYq3LmjwgySM9lx0heY51Ov6sbscko";
+const std::string TELEGRAM_TOKEN = getDotenvValue(loadDotenv(".env"), "TELEGRAM_TOKEN");
 int64_t CHAT_ID;
 const std::vector<std::vector<std::string>> acts = {{"Power up(3MP)", "Stun(5MP)", "Heal(3MP)"}, {"Swap bullet(3MP)", "Fireball(5MP)", "Blood ritual(0MP)"}, {"Shoot myself", "Shoot enemy"}};
 
@@ -64,7 +65,7 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
                 mp -= 3;
                 damage = 2;
                 sendTelegramMessage(chat_id, "💖 You powered up! 💪");
-                sendTelegramMp4Animation(chat_id, "power_up.mp4");
+                //sendTelegramMp4Animation(chat_id, "power_up.mp4");
                 //sendTelegramMessage(chat_id, "your mp: "+std::to_string(mp));
                 // cout << "Spell was casted" << endl;
                 // cout << "your mp: " << mp << endl;
@@ -81,7 +82,7 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
                 mp -= 5;
                 enemy.stun();
                 sendTelegramMessage(chat_id, "💖 You stunned the enemy for 1 turn 💀💫");
-                sendTelegramMp4Animation(chat_id, "stun.mp4");
+                //sendTelegramMp4Animation(chat_id, "stun.mp4");
                 //sendTelegramMessage(chat_id, "your mp: "+std::to_string(mp));
                 // cout << "Spell was casted" << endl;
                 //cout << "your mp: " << mp << endl;
@@ -98,7 +99,7 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
                 mp -= 3;
                 hp++;
                 sendTelegramMessage(chat_id, "💖 You recovered 1 HP ❤️‍🩹");
-                sendTelegramMp4Animation(chat_id, "heal.mp4");
+                //sendTelegramMp4Animation(chat_id, "heal.mp4");
                 //sendTelegramMessage(chat_id, "your mp: "+std::to_string(mp));
                 //sendTelegramMessage(chat_id, "your hp: "+std::to_string(hp));
 
@@ -122,7 +123,7 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
                 mp -= 3;
                 gun.swap_bullet();
                 sendTelegramMessage(chat_id, "💖 You swapped bullet 🔄");
-                sendTelegramMp4Animation(chat_id, "swap_bullet.mp4");
+                //sendTelegramMp4Animation(chat_id, "swap_bullet.mp4");
                 //sendTelegramMessage(chat_id, "your mp: "+std::to_string(mp));
                 // cout << "Spell was casted" << endl;
                 // cout << "your mp: " << mp << endl;
@@ -142,7 +143,7 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
                     return 0;
                 }
                 sendTelegramMessage(chat_id, "💖 You casted fireball 💀💥");
-                sendTelegramMp4Animation(chat_id, "fireball.mp4");
+                //sendTelegramMp4Animation(chat_id, "fireball.mp4");
                 //sendTelegramMessage(chat_id, "your mp: "+std::to_string(mp));
                 //sendTelegramMessage(chat_id, "enemy hp: "+std::to_string(enemy.get_hp()));
                 // cout << "Spell was casted" << endl;
@@ -166,7 +167,7 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
                     mp+=2;
                 }
                 sendTelegramMessage(chat_id, "💖 You performed a blood ritual 🩸➡️🔮");
-                sendTelegramMp4Animation(chat_id, "blood_ritual.mp4");
+                //sendTelegramMp4Animation(chat_id, "blood_ritual.mp4");
                 //sendTelegramMessage(chat_id, "your mp: "+std::to_string(mp));
                 //sendTelegramMessage(chat_id, "your hp: "+std::to_string(hp));
                 // cout << "Spell was casted" << endl;
@@ -192,18 +193,18 @@ bool player::move(const int64_t chat_id, contestant& enemy, revolver& gun) {
     }
     if (act == "Shoot enemy") {
         if (gun.shoot(chat_id)) {
-            sendTelegramMp4Animation(chat_id, "shot_bullet.mp4");
+            //sendTelegramMp4Animation(chat_id, "shot_bullet.mp4");
             enemy.set_hp(enemy.get_hp() - damage);
         }
         else {
-            sendTelegramMp4Animation(chat_id, "shot_no_bullet.mp4");
+            //sendTelegramMp4Animation(chat_id, "shot_no_bullet.mp4");
         }
         sendTelegramMessage(chat_id, "💀 Enemy HP: "+std::to_string(enemy.get_hp()));
         //cout << "enemy hp: " << enemy.get_hp() << endl;
         return 1;
     }
     else if (act == "Shoot myself") {
-        sendTelegramMp4Animation(chat_id, "shoot_myself.mp4");
+        //sendTelegramMp4Animation(chat_id, "shoot_myself.mp4");
         if (!gun.shoot(chat_id)) {
             enemy.set_mp(enemy.get_mp()+1);
             return 0;

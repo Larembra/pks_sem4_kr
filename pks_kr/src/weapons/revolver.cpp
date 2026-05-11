@@ -1,5 +1,5 @@
-#include "revolver.h"
-#include "telegram.h"
+#include "../include/weapons/revolver.h"
+#include "../include/API/telegram.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>

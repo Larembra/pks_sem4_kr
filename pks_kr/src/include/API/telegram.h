@@ -27,7 +27,7 @@ void sendTelegramMessageWithKeyboard(const std::int64_t chat_id, const std::stri
 //     const std::vector<std::pair<std::string, std::string>>& buttons // {текст кнопки, callback_data}
 // );
 //void sendTelegramGif(const std::string& gif_path);
-void sendTelegramMp4Animation(const int64_t chat_id, const std::string& mp4_path);
+//void sendTelegramMp4Animation(const int64_t chat_id, const std::string& mp4_path);
 // Ожидание и получение нового сообщения пользователя
 std::string waitForTelegramInput(const int64_t chat_id);
 

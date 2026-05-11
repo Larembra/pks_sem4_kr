@@ -1,4 +1,4 @@
-#include "contestant.h"
+#include "../include/contestants/contestant.h"
 
 void contestant::set_hp(int Hp) {
     hp = Hp;

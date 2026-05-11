@@ -4,9 +4,9 @@
 #include <thread>
 #include <string>
 #include <vector>
-#include "player.h"
-#include "revolver.h"
-#include "nn.h"
+#include "../contestants/player.h"
+#include "../weapons/revolver.h"
+#include "../contestants/nn.h"
 
 enum class GameStage {
     Intro,

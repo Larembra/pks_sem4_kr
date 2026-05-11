@@ -1,6 +1,7 @@
-#include "telegram.h"
+#include "../include/API/telegram.h"
 #include <curl/curl.h>
-#include "json.hpp"
+#include "../include/json/json.hpp"
+#include "../include/secret/dotenv.h"
 #include <thread>
 #include <chrono>
 #include <fstream>
@@ -9,8 +10,21 @@
 
 using json = nlohmann::json;
 
-const std::string token = ".....";
+static std::string token;
 int64_t chat_id;
+
+static void initTelegramToken() {
+    static bool inited = false;
+    if (inited) return;
+
+    auto envs = loadDotenv(".env");
+    token = getDotenvValue(envs, "TELEGRAM_TOKEN");
+    if (token.empty()) {
+        throw std::runtime_error("TELEGRAM_TOKEN not found in .env");
+    }
+
+    inited = true;
+}
 
 size_t writecallback(void* contents, size_t size, size_t nmemb, void* userp) {
     ((std::string*)userp)->append((char*)contents, size * nmemb);
@@ -18,6 +32,8 @@ size_t writecallback(void* contents, size_t size, size_t nmemb, void* userp) {
 }
 
 int64_t getChatId() {
+    initTelegramToken();
+
     int64_t last_update_id = 0;
     while (true) {
         CURL* curl = curl_easy_init();
@@ -67,6 +83,8 @@ int64_t getChatId() {
 }
 
 void sendTelegramMessage(const int64_t chat_id, const std::string& text) {
+    initTelegramToken();
+
     CURL* curl = curl_easy_init();
     if (curl) {
         std::string url = "https://api.telegram.org/bot" + token + "/sendMessage";
@@ -96,6 +114,8 @@ void sendTelegramMessageWithKeyboard(
     const std::string& text,
     const std::vector<std::vector<std::string>>& button_rows
 ) {
+    initTelegramToken();
+
     CURL* curl = curl_easy_init();
     if (curl) {
         std::string url = "https://api.telegram.org/bot" + token + "/sendMessage";
@@ -128,54 +148,9 @@ void sendTelegramMessageWithKeyboard(
     }
 }
 
-void sendTelegramMp4Animation(const int64_t chat_id, const std::string& mp4_path) {
-    CURL* curl = curl_easy_init();
-    if (curl) {
-        struct curl_httppost* form = nullptr;
-        struct curl_httppost* last = nullptr;
-
-        std::ifstream file(mp4_path, std::ios::binary);
-        if (!file.is_open()) {
-            sendTelegramMessage(chat_id, "Error: file mp4 not found!");
-            curl_easy_cleanup(curl);
-            return;
-        }
-        if (mp4_path.size() < 4 || mp4_path.substr(mp4_path.size() - 4) != ".mp4") {
-            sendTelegramMessage(chat_id, "Error: file isn't mp4!");
-            curl_easy_cleanup(curl);
-            return;
-        }
-
-        curl_formadd(&form, &last,
-            CURLFORM_COPYNAME, "chat_id",
-            CURLFORM_COPYCONTENTS, std::to_string(chat_id).c_str(),
-            CURLFORM_END);
-
-        curl_formadd(&form, &last,
-            CURLFORM_COPYNAME, "animation",
-            CURLFORM_FILE, mp4_path.c_str(),
-            CURLFORM_END);
-
-        std::string url = "https://api.telegram.org/bot" + token + "/sendAnimation";
-
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        curl_easy_setopt(curl, CURLOPT_HTTPPOST, form);
-
-        std::string readBuffer;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writecallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-
-        CURLcode res = curl_easy_perform(curl);
-        if (res != CURLE_OK) {
-            std::cerr << "sendTelegramMp4Animation: curl error: " << curl_easy_strerror(res) << std::endl;
-        }
-
-        curl_formfree(form);
-        curl_easy_cleanup(curl);
-    }
-}
-
 int64_t getLastUpdateId() {
+    initTelegramToken();
+
     CURL* curl = curl_easy_init();
     std::string readBuffer;
     int64_t last_update_id = 0;
@@ -219,6 +194,8 @@ int64_t getLastUpdateId() {
 }
 
 std::string waitForTelegramInput(const int64_t chat_id) {
+    initTelegramToken();
+
     int64_t last_update_id = getLastUpdateId();
     while (true) {
         CURL* curl = curl_easy_init();
@@ -267,6 +244,8 @@ std::string waitForTelegramInput(const int64_t chat_id) {
 }
 
 void setBotCommands() {
+    initTelegramToken();
+
     CURL* curl = curl_easy_init();
     if (curl) {
         json commands_json = json::array({

@@ -1,25 +1,24 @@
-#include "game.h"
-#include "revolver.h"
-#include "player.h"
-#include "nn.h"
+#include "../include/game/game.h"
+#include "../include/weapons/revolver.h"
+#include "../include/contestants/player.h"
+#include "../include/contestants/nn.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <curl/curl.h>
-#include "json.hpp"
+#include "../include/json/json.hpp"
 #include <unistd.h>
 #include <thread>
 #include <chrono>
-#include "telegram.h"
-#include "test_connection.h"
-#include "test_vk_bot.h"
+#include "../include/API/telegram.h"
+
 
 using json = nlohmann::json;
 using namespace std;
 
 int main() {
 
-    test_vk_bot();
+    //test_vk_bot();
 
     //testTelegramAPI();
 

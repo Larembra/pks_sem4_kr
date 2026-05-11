@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "contestant.h"
-#include "revolver.h"
+#include "../weapons/revolver.h"
 #include <string>
 #include <cstdint>
 

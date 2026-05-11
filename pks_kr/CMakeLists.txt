@@ -18,16 +18,15 @@ if (CURL_FOUND)
 endif()
 
 add_executable(pks_kr
-        src/main.cpp
-        src/revolver.cpp
-        src/contestant.cpp
-        src/nn.cpp
-        src/player.cpp
-        src/telegram.cpp
-        src/game.cpp
-        src/test_connection.cpp
-        src/test_vk_bot.cpp
-        #tgbottest.cpp
+        src/game/main.cpp
+        src/weapons/revolver.cpp
+        src/contestants/contestant.cpp
+        src/contestants/nn.cpp
+        src/contestants/player.cpp
+        src/API/telegram.cpp
+        src/game/game.cpp
+        src/secret/dotenv.cpp
+
 )
 
 target_link_libraries(pks_kr

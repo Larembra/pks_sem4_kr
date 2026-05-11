@@ -1,5 +1,5 @@
-#include "nn.h"
-#include "revolver.h"
+#include "../include/contestants/nn.h"
+#include "../include/weapons/revolver.h"
 #include <iostream>
 
 #include <iostream>
@@ -7,8 +7,9 @@
 #include <vector>
 #include <string>
 #include "curl/curl.h"
-#include "json.hpp"
-#include "telegram.h"
+#include "../include/json/json.hpp"
+#include "../include/API/telegram.h"
+#include "../include/secret/dotenv.h"
 
 
 using json = nlohmann::json;
@@ -53,7 +54,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
                 mp -= 3;
                 damage = 2;
                 sendTelegramMessage(chat_id, "💀 Enemy powered up 💪");
-                sendTelegramMp4Animation(chat_id, "power_up.mp4");
+                //sendTelegramMp4Animation(chat_id, "power_up.mp4");
                 //sendTelegramMessage(chat_id, "Enemy mp: "+std::to_string(mp));
                 // std::cout << "enemy used Power up" << std::endl;
                 // std::cout << "enemy mp: " << mp << std::endl;
@@ -68,7 +69,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
                 mp -= 5;
                 enemy.stun();
                 sendTelegramMessage(chat_id, "💀 Enemy stunned you for 1 turn 💖💫");
-                sendTelegramMp4Animation(chat_id, "stun.mp4");
+                //sendTelegramMp4Animation(chat_id, "stun.mp4");
                 //sendTelegramMessage(chat_id, "enemy mp: "+std::to_string(mp));
                 // std::cout << "enemy used stun" << std::endl;
                 // std::cout << "enemy mp: " << mp << std::endl;
@@ -83,7 +84,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
                 mp -= 3;
                 hp++;
                 sendTelegramMessage(chat_id, "💀 Enemy recovered 1 HP ❤️‍🩹");
-                sendTelegramMp4Animation(chat_id, "heal.mp4");
+                //sendTelegramMp4Animation(chat_id, "heal.mp4");
                 //sendTelegramMessage(chat_id, "enemy mp: "+std::to_string(mp));
                 //sendTelegramMessage(chat_id, "enemy hp: "+std::to_string(hp));
                 // std::cout << "enemy used heal" << std::endl;
@@ -103,7 +104,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
                 mp -= 3;
                 gun.swap_bullet();
                 sendTelegramMessage(chat_id, "💀 Enemy swapped bullet 🔄");
-                sendTelegramMp4Animation(chat_id, "swap_bullet.mp4");
+                //sendTelegramMp4Animation(chat_id, "swap_bullet.mp4");
                 //sendTelegramMessage(chat_id, "enemy mp: "+std::to_string(mp));
                 // std::cout << "enemy used swap bullet" << std::endl;
                 // std::cout << "enemy mp: " << mp << std::endl;
@@ -121,7 +122,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
                     return 1;
                 }
                 sendTelegramMessage(chat_id, "💀 Enemy casted fireball 💖💥");
-                sendTelegramMp4Animation(chat_id, "fireball.mp4");
+                //sendTelegramMp4Animation(chat_id, "fireball.mp4");
                 //sendTelegramMessage(chat_id, "enemy mp: "+std::to_string(mp));
                 //sendTelegramMessage(chat_id, "your hp: "+std::to_string(enemy.get_hp()));
                 // std::cout << "enemy used fireball" << std::endl;
@@ -143,7 +144,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
                     mp+=2;
                 }
                 sendTelegramMessage(chat_id, "💀 Enemy performed a blood ritual 🩸➡️🔮");
-                sendTelegramMp4Animation(chat_id, "blood_ritual.mp4");
+                //sendTelegramMp4Animation(chat_id, "blood_ritual.mp4");
                 //sendTelegramMessage(chat_id, "enemy mp: "+std::to_string(mp));
                 //sendTelegramMessage(chat_id, "enemy hp: "+std::to_string(hp));
                 // std::cout << "enemy used bloodritual" << std::endl;
@@ -159,11 +160,11 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
             sendTelegramMessage(chat_id, "💀 Enemy shot you!");
             //std::cout << "enemy shot you!" << std::endl;
             if (gun.shoot(chat_id)) {
-                sendTelegramMp4Animation(chat_id, "shot_bullet.mp4");
+                //sendTelegramMp4Animation(chat_id, "shot_bullet.mp4");
                 enemy.set_hp(enemy.get_hp() - damage);
             }
             else {
-                sendTelegramMp4Animation(chat_id, "shot_no_bullet.mp4");
+                //sendTelegramMp4Animation(chat_id, "shot_no_bullet.mp4");
             }
             sendTelegramMessage(chat_id, "💖 Your HP: "+std::to_string(enemy.get_hp()));
 
@@ -171,7 +172,7 @@ bool nn::move(const int64_t chat_id, contestant& enemy, revolver& gun, std::stri
             return 0;
         }
         else if (act == "Shoot myself") {
-            sendTelegramMp4Animation(chat_id, "shoot_myself.mp4");
+            //sendTelegramMp4Animation(chat_id, "shoot_myself.mp4");
             sendTelegramMessage(chat_id, "💀 Enemy shot himself!");
             //std::cout << "enemy shot himself!" << std::endl;
             if (!gun.shoot(chat_id)) {
@@ -381,7 +382,7 @@ std::string nn::format_status(contestant& enemy, revolver& gun) {
 // }
 
 std::vector<std::string> nn::get_response(contestant& enemy, revolver& gun, std::string neuro) {
-    std::string githubToken = "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", model;
+    std::string githubToken = getDotenvValue(loadDotenv(".env"), "GITHUB_MODELS_TOKEN"), model;
     if (neuro == "DeepSeek-V3-0324") {
 
         model = "deepseek/DeepSeek-V3-0324";
