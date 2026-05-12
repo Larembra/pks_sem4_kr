@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const std::string TELEGRAM_TOKEN = getDotenvValue(loadDotenv(".env"), "TELEGRAM_TOKEN");
+//const std::string TELEGRAM_TOKEN = getDotenvValue(loadDotenv(".env"), "TELEGRAM_TOKEN");
 int64_t CHAT_ID;
 const std::vector<std::vector<std::string>> acts = {{"Power up(3MP)", "Stun(5MP)", "Heal(3MP)"}, {"Swap bullet(3MP)", "Fireball(5MP)", "Blood ritual(0MP)"}, {"Shoot myself", "Shoot enemy"}};
 
