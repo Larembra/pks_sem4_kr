@@ -3,6 +3,11 @@ add_executable(pks_kr_unit_tests
         test_nn.cpp
         test_player.cpp
         test_revolver.cpp
+        scenario_status_flow.cpp
+        scenario_revolver_cycle.cpp
+        scenario_contestant_state.cpp
+        scenario_player_status_variants.cpp
+        scenario_revolver_printmagazine.cpp
         ../src/API/telegram.cpp
         ../src/secret/dotenv.cpp
         ../src/contestants/nn.cpp
